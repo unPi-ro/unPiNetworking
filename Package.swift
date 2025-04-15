@@ -11,12 +11,13 @@ let package = Package(
     products: [
         .library(
             name: "unPiNetworking",
-            targets: ["unPiNetworking"]),
+            targets: ["unPiNetworking"])
     ],
     targets: [
         .target(
             name: "unPiNetworking"),
         .testTarget(
             name: "unPiNetworkingTests",
-            dependencies: ["unPiNetworking"]
-        )])
+            dependencies: ["unPiNetworking"])
+    ]
+)

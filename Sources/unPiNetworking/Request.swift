@@ -43,7 +43,6 @@ public struct Endpoint: Sendable {
         if let cachePolicy = cachePolicy {
             request.cachePolicy = cachePolicy
         }
-
         return request
     }
 }

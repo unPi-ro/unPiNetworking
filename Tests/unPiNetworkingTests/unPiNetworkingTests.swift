@@ -27,7 +27,7 @@ final class URLSessionTests: XCTestCase {
             headerFields: nil
         )!
 
-        URLProtocolStub.requestHandler = { request in
+        URLProtocolStub.requestHandler = { _ in
             return (expectedResponse, expectedData)
         }
 
