@@ -10,8 +10,3 @@ public enum NetworkError: Error, Sendable {
     case cancelled
     case timeout
 }
-
-
-
-
-

@@ -7,7 +7,7 @@ public struct NetworkConfiguration: Sendable {
     public let retryCount: Int
     public let cachePolicy: URLRequest.CachePolicy
     public let defaultContentType: String?
-    
+
     public init(
         baseURL: URL,
         defaultHeaders: [String: String] = [:],
@@ -26,7 +26,7 @@ public struct NetworkConfiguration: Sendable {
 }
 
 extension NetworkConfiguration {
-    func makeURLSessionConfiguration()       -> URLSessionConfiguration {
+    func makeURLSessionConfiguration() -> URLSessionConfiguration {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = timeoutInterval
         configuration.timeoutIntervalForResource = timeoutInterval
@@ -35,11 +35,3 @@ extension NetworkConfiguration {
         return configuration
     }
 }
-
-
-
-
-
-
-
-

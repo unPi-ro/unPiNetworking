@@ -8,7 +8,7 @@ public struct Endpoint: Sendable {
     public var body: Data?
     public var baseURL: URL
     public var cachePolicy: URLRequest.CachePolicy?
-    
+
     public init(
         baseURL: URL,
         path: String,
@@ -26,7 +26,7 @@ public struct Endpoint: Sendable {
         self.body = body
         self.cachePolicy = cachePolicy
     }
-    
+
     func asURLRequest() throws -> URLRequest {
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
         components?.path += path.hasPrefix("/") ? path : "/\(path)"
@@ -35,7 +35,7 @@ public struct Endpoint: Sendable {
         guard let url = components?.url else {
             throw NetworkError.invalidURL
         }
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         request.allHTTPHeaderFields = headers
@@ -43,9 +43,8 @@ public struct Endpoint: Sendable {
         if let cachePolicy = cachePolicy {
             request.cachePolicy = cachePolicy
         }
-        
+
         return request
     }
 }
-
 
