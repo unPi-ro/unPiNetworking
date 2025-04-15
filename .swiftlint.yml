@@ -1,101 +1,67 @@
-# SwiftLint Configuration File
+included:
+  - Targets/Digitalbank/Sources
+  - Targets/Digitalbank/Tests
+  - Modules
 
-# Opt-in rules that are useful for networking code
+excluded:
+  - Modules/AppModules/Sources/**/Generated/**
+  - Targets/Digitalbank/Sources/Generated/**
+  - Modules/AppModules/.build/**
+  - Carthage
+  - .build/**
+  - Pods
+  - LocalPackages/Vendor/**/*
+  - LocalPackages/**/Generated/**
+  - Modules/AppModules/Sources/DeviceSecurity/RuntimeHookDetection/FishHookChecker.swift
+
+disabled_rules:
+  - trailing_whitespace
+  - redundant_discardable_let
+  - blanket_disable_command
+
 opt_in_rules:
   - empty_count
-  - explicit_init
-  - first_where
-  - overridden_super_call
-  - prohibited_super_call
-  - redundant_nil_coalescing
-  - sorted_imports
-  - unneeded_parentheses_in_closure_argument
-  - trailing_whitespace
+  - empty_string
   - todo
+  - superfluous_disable_command
 
-# Custom rules configuration
 line_length:
-  warning: 120
+  warning: 150
   error: 200
+  ignores_function_declarations: true
   ignores_comments: true
   ignores_urls: true
-
+function_body_length:
+  warning: 300
+  error: 500
+function_parameter_count:
+  warning: 6
+  error: 8
 type_body_length:
   warning: 300
-  error: 400
-
-function_body_length:
-  warning: 40
-  error: 100
-
+  error: 500
 file_length:
-  warning: 500
-  error: 1000
-
-# Naming rules
+  warning: 1000
+  error: 1500
+  ignore_comment_only_lines: true
+nesting:
+  type_level: 3
+cyclomatic_complexity:
+  warning: 50
+  error: 55
+type_name:
+  min_length: 3
+  max_length: 70
 identifier_name:
-  min_length: 2
-  max_length: 60
   excluded:
+    - qa
     - id
-    - URL
-    - HTTP
-    - API
-    - JSON
-    - URLSession
-    - URLRequest
-    - URLResponse
-    - URLProtocol
-    - XCTest
-    - XCTestCase
-
-# Documentation rules
-missing_docs:
-  warning: true
-  excluded:
-    - Tests
-
-# Import rules
-sorted_imports:
-  severity: warning
-
-# Force unwrapping rules
-force_unwrapping:
-  severity: error
-
-# Force cast rules
-force_cast:
-  severity: error
-
-# Empty count rules
-empty_count:
-  severity: warning
-
-# Explicit init rules
-explicit_init:
-  severity: warning
-
-# Redundant nil coalescing rules
-redundant_nil_coalescing:
-  severity: warning
-
-# Unneeded parentheses rules
-unneeded_parentheses_in_closure_argument:
-  severity: warning
-
-# Trailing whitespace rules
-trailing_whitespace:
-  severity: warning
-  ignores_empty_lines: true
-  ignores_comments: true
-
-# TODO rules
-todo:
-  severity: warning
-
-# Exclude certain paths
-excluded:
-  - Carthage
-  - Pods
-  - .build
-  - Tests 
+  min_length: 3
+  max_length: 70
+generic_type_name:
+  max_length:
+    warning: 30
+large_tuple:
+  warning: 3
+  error: 4
+reporter: "xcode"
