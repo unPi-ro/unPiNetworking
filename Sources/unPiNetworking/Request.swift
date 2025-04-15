@@ -47,4 +47,3 @@ public struct Endpoint: Sendable {
         return request
     }
 }
-

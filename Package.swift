@@ -19,6 +19,4 @@ let package = Package(
         .testTarget(
             name: "unPiNetworkingTests",
             dependencies: ["unPiNetworking"]
-        ),
-    ]
-)
+        )])
