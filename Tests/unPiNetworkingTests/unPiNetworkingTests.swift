@@ -33,7 +33,7 @@ final class URLSessionTests: XCTestCase {
 
         // When
         let (data, response) = try await session.data(from: URL(string: "https://example.com")!)
-        
+
         // Then
         XCTAssertEqual(data, expectedData)
         XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 200)
@@ -61,7 +61,7 @@ final class URLSessionTests: XCTestCase {
         // Given
         let expectedHeaders = ["Authorization": "Bearer token"]
         var capturedRequest: URLRequest?
-        
+
         URLProtocolStub.requestHandler = { request in
             capturedRequest = request
             return (HTTPURLResponse(), Data())
@@ -79,7 +79,7 @@ final class URLSessionTests: XCTestCase {
 
 final class URLProtocolStub: URLProtocol {
     nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
-    
+
     override class func canInit(with request: URLRequest) -> Bool {
         return true
     }
