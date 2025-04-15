@@ -20,6 +20,8 @@ disabled_rules:
   - blanket_disable_command
 
 opt_in_rules:
+  - vertical_whitespace
+  - trailing_newline
   - empty_count
   - empty_string
   - todo
