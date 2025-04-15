@@ -26,7 +26,7 @@ public struct NetworkConfiguration: Sendable {
 }
 
 extension NetworkConfiguration {
-    func makeURLSessionConfiguration() -> URLSessionConfiguration {
+    func makeURLSessionConfiguration()       -> URLSessionConfiguration {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = timeoutInterval
         configuration.timeoutIntervalForResource = timeoutInterval
