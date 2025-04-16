@@ -1,7 +1,6 @@
 import Foundation
 
 public struct NetworkConfiguration: Sendable {
-    public let baseURL: URL
     public let defaultHeaders: [String: String]
     public let timeoutInterval: TimeInterval
     public let retryCount: Int
@@ -9,14 +8,12 @@ public struct NetworkConfiguration: Sendable {
     public let defaultContentType: String?
 
     public init(
-        baseURL: URL,
         defaultHeaders: [String: String] = [:],
         timeoutInterval: TimeInterval = 30,
         retryCount: Int = 3,
         cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy,
         defaultContentType: String? = "application/json"
     ) {
-        self.baseURL = baseURL
         self.defaultHeaders = defaultHeaders
         self.timeoutInterval = timeoutInterval
         self.retryCount = retryCount
