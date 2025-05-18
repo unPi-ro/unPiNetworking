@@ -36,11 +36,12 @@ public actor NetworkService: NetworkServiceProtocol {
         let request = try endpoint.asURLRequest()
         return try await performRequest(request, retryCount: configuration.retryCount)
     }
+    
+    
+    
+    
 
-    public func request<T: Decodable & Sendable, E: Encodable & Sendable>(
-        _ endpoint: Endpoint,
-        body: E
-    ) async throws -> T {
+    public func request<T: Decodable & Sendable, E: Encodable & Sendable>(_ endpoint: Endpoint,body: E) async throws -> T {
         var endpoint = endpoint
         let encodedData = try encoder.encode(body)
         endpoint.body = encodedData
@@ -62,10 +63,7 @@ public actor NetworkService: NetworkServiceProtocol {
         return try await performRequest(request, retryCount: configuration.retryCount)
     }
 
-    private func performRequest<T: Decodable & Sendable>(
-        _ request: URLRequest,
-        retryCount: Int
-    ) async throws -> T {
+    private func performRequest<T: Decodable & Sendable>(_ request: URLRequest,retryCount: Int) async throws -> T {
         do {
             let (data, response) = try await session.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse else {
