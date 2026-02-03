@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__xcodebuildmcp__session-set-defaults",
+      "mcp__xcodebuildmcp__list_sims",
+      "mcp__xcodebuildmcp__build_sim",
+      "Bash(xcodebuild:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(gh:*)",
+      "Bash(git:*)",
+      "WebSearch",
+      "WebFetch(domain:developer.apple.com)",
+      "Bash(python3 -m json.tool:*)",
+      "mcp__xcodebuildmcp__discover_projs",
+      "mcp__xcodebuildmcp__build_run_sim",
+      "mcp__xcodebuildmcp__session-show-defaults",
+      "mcp__xcodebuildmcp__list_schemes",
+      "mcp__xcodebuildmcp__get_sim_app_path",
+      "mcp__xcodebuildmcp__get_app_bundle_id",
+      "mcp__xcodebuildmcp__install_app_sim",
+      "mcp__xcodebuildmcp__open_sim",
+      "mcp__xcodebuildmcp__launch_app_sim",
+      "mcp__xcodebuildmcp__screenshot",
+      "mcp__xcodebuildmcp__describe_ui",
+      "mcp__xcodebuildmcp__tap",
+      "mcp__xcodebuildmcp__long_press",
+      "mcp__xcodebuildmcp__start_sim_log_cap",
+      "mcp__xcodebuildmcp__stop_sim_log_cap",
+      "mcp__xcodebuildmcp__button",
+      "mcp__xcodebuildmcp__show_build_settings",
+      "mcp__xcodebuildmcp__session-clear-defaults",
+      "mcp__xcodebuildmcp__boot_sim",
+      "mcp__xcodebuildmcp__stop_app_sim",
+      "Skill(ralph-loop:ralph-loop)"
+    ]
+  }
+}
