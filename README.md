@@ -99,6 +99,8 @@ let created: User = try await service.request(endpoint, body: newUser)
 
 ### Error Handling
 
+`NetworkService` throws `NetworkError` for URL, response, and HTTP status failures. Other errors (decoding, URL session) are rethrown as-is.
+
 ```swift
 do {
     let user: User = try await service.request(endpoint)
@@ -110,17 +112,15 @@ do {
         print("Invalid response")
     case .httpError(let statusCode, let data):
         print("HTTP \(statusCode): \(String(data: data, encoding: .utf8) ?? "")")
-    case .decodingError(let underlyingError):
-        print("Decoding failed: \(underlyingError)")
-    case .timeout:
-        print("Request timed out")
-    case .cancelled:
-        print("Request cancelled")
-    case .invalidRequest:
-        print("Invalid request")
-    case .unknown:
-        print("Unknown error")
+    default:
+        print("Network error: \(error)")
     }
+} catch is DecodingError {
+    print("Failed to decode response")
+} catch let error as URLError {
+    print("URL error: \(error.code)")
+} catch {
+    print("Unexpected error: \(error)")
 }
 ```
 
