@@ -197,6 +197,7 @@ public actor WebSocketService: WebSocketServiceProtocol {
 
             continuation.onTermination = { @Sendable _ in
                 task.cancel()
+                rawContinuation.finish()
             }
         }
     }
