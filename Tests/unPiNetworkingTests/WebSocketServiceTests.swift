@@ -315,6 +315,74 @@ final class WebSocketServiceTests: XCTestCase {
         XCTAssertEqual(mockProvider.createdTasks.count, taskCountAfterDisconnect)
     }
 
+    func test_receive_messageTooBig_throwsError() async throws {
+        // Given
+        struct TestMessage: Codable, Sendable {
+            let value: String
+        }
+        let config = WebSocketConfiguration(pingInterval: nil, maximumMessageSize: 10)
+        service = makeService(configuration: config)
+        try await service.connect(url: testURL, headers: nil)
+        let task = mockProvider.latestTask!
+
+        // When
+        let stream = await service.receive(TestMessage.self)
+
+        try await Task.sleep(nanoseconds: 50_000_000)
+
+        let largePayload = String(repeating: "x", count: 100)
+        task.simulateReceive(.string("{\"value\":\"\(largePayload)\"}"))
+
+        // Then
+        var iterator = stream.makeAsyncIterator()
+        do {
+            _ = try await iterator.next()
+            XCTFail("Expected WebSocketError.messageTooBig")
+        } catch {
+            guard let wsError = error as? WebSocketError,
+                  case .messageTooBig = wsError else {
+                XCTFail("Expected WebSocketError.messageTooBig, got \(error)")
+                return
+            }
+        }
+    }
+
+    func test_reconnectExhausted_surfacesErrorInStream() async throws {
+        // Given
+        struct TestMessage: Codable, Sendable {
+            let value: Int
+        }
+        let config = WebSocketConfiguration(
+            retryCount: 1,
+            retryBaseDelay: 0.05,
+            retryMaxDelay: 0.05,
+            pingInterval: nil
+        )
+        service = makeService(configuration: config)
+        try await service.connect(url: testURL, headers: nil)
+        let firstTask = mockProvider.latestTask!
+
+        let stream = await service.receive(TestMessage.self)
+        try await Task.sleep(nanoseconds: 50_000_000)
+
+        // When — make provider fail, then trigger receive error
+        mockProvider.setCreateError(URLError(.cannotConnectToHost))
+        firstTask.simulateError(URLError(.networkConnectionLost))
+
+        // Then — stream should finish with maxReconnectAttemptsExhausted
+        var iterator = stream.makeAsyncIterator()
+        do {
+            _ = try await iterator.next()
+            XCTFail("Expected WebSocketError.maxReconnectAttemptsExhausted")
+        } catch {
+            guard let wsError = error as? WebSocketError,
+                  case .maxReconnectAttemptsExhausted = wsError else {
+                XCTFail("Expected WebSocketError.maxReconnectAttemptsExhausted, got \(error)")
+                return
+            }
+        }
+    }
+
     // MARK: - Configuration Tests
 
     func test_defaultConfiguration_hasExpectedValues() {

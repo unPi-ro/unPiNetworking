@@ -11,7 +11,7 @@ public protocol URLSessionWebSocketTaskProtocol: Sendable {
 
 @available(iOS 15.0, macOS 10.15, *)
 public protocol WebSocketTaskProviding: Sendable {
-    func createWebSocketTask(with request: URLRequest) -> URLSessionWebSocketTaskProtocol
+    func createWebSocketTask(with request: URLRequest) throws -> URLSessionWebSocketTaskProtocol
 }
 
 @available(iOS 15.0, macOS 10.15, *)

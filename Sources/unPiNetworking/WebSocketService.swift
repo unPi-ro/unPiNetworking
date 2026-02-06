@@ -88,7 +88,13 @@ public actor WebSocketService: WebSocketServiceProtocol {
             request.setValue(value, forHTTPHeaderField: key)
         }
 
-        let task = taskProvider.createWebSocketTask(with: request)
+        let task: URLSessionWebSocketTaskProtocol
+        do {
+            task = try taskProvider.createWebSocketTask(with: request)
+        } catch {
+            updateState(.disconnected)
+            throw WebSocketError.connectionFailed(error)
+        }
         task.resume()
         self.webSocketTask = task
 
@@ -131,6 +137,7 @@ public actor WebSocketService: WebSocketServiceProtocol {
     public func receive<T: Decodable & Sendable>(_ type: T.Type) -> AsyncThrowingStream<T, Error> {
         let continuationID = UUID()
         let decoder = self.decoder
+        let maxSize = configuration.maximumMessageSize
 
         let (rawStream, rawContinuation) = AsyncThrowingStream.makeStream(
             of: URLSessionWebSocketTask.Message.self
@@ -167,6 +174,11 @@ public actor WebSocketService: WebSocketServiceProtocol {
                             data = stringData
                         @unknown default:
                             continue
+                        }
+
+                        guard data.count <= maxSize else {
+                            continuation.finish(throwing: WebSocketError.messageTooBig(size: data.count, maxSize: maxSize))
+                            return
                         }
 
                         do {
@@ -218,10 +230,6 @@ public actor WebSocketService: WebSocketServiceProtocol {
                 }
             } catch {
                 if !intentionalDisconnect {
-                    for continuation in messageContinuations.values {
-                        continuation.finish(throwing: WebSocketError.receiveFailed(error))
-                    }
-                    messageContinuations.removeAll()
                     await attemptReconnect()
                 }
                 break
@@ -291,6 +299,10 @@ public actor WebSocketService: WebSocketServiceProtocol {
             }
         }
 
+        for continuation in messageContinuations.values {
+            continuation.finish(throwing: WebSocketError.maxReconnectAttemptsExhausted)
+        }
+        messageContinuations.removeAll()
         updateState(.disconnected)
     }
 

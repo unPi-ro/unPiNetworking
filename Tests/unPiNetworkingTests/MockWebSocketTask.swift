@@ -99,6 +99,7 @@ final class MockWebSocketTaskProvider: WebSocketTaskProviding, @unchecked Sendab
     private let lock = NSLock()
     private var _createdTasks: [MockWebSocketTask] = []
     private var _capturedRequests: [URLRequest] = []
+    private var _createError: Error?
 
     var createdTasks: [MockWebSocketTask] {
         lock.withLock { _createdTasks }
@@ -112,12 +113,19 @@ final class MockWebSocketTaskProvider: WebSocketTaskProviding, @unchecked Sendab
         lock.withLock { _createdTasks.last }
     }
 
-    func createWebSocketTask(with request: URLRequest) -> URLSessionWebSocketTaskProtocol {
-        let task = MockWebSocketTask()
-        lock.withLock {
+    func setCreateError(_ error: Error?) {
+        lock.withLock { _createError = error }
+    }
+
+    func createWebSocketTask(with request: URLRequest) throws -> URLSessionWebSocketTaskProtocol {
+        try lock.withLock {
+            if let error = _createError {
+                throw error
+            }
+            let task = MockWebSocketTask()
             _createdTasks.append(task)
             _capturedRequests.append(request)
+            return task
         }
-        return task
     }
 }

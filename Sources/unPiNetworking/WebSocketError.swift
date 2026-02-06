@@ -10,5 +10,6 @@ public enum WebSocketError: Error, Sendable {
     case receiveFailed(Error)
     case encodingError(Error)
     case decodingError(Error)
+    case messageTooBig(size: Int, maxSize: Int)
     case maxReconnectAttemptsExhausted
 }
