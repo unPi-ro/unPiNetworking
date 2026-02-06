@@ -5,7 +5,7 @@ public protocol NetworkServiceProtocol {
     func request<T: Decodable & Sendable, E: Encodable & Sendable>(_ endpoint: Endpoint, body: E) async throws -> T
 }
 
-@available(iOS 15.0, *)
+@available(iOS 15.0, macOS 12.0, *)
 public actor NetworkService: NetworkServiceProtocol {
     private let session: URLSession
     private let encoder: JSONEncoder
@@ -59,7 +59,7 @@ public actor NetworkService: NetworkServiceProtocol {
         return try await performRequest(request, retryCount: configuration.retryCount)
     }
 
-    private func performRequest<T: Decodable & Sendable>(_ request: URLRequest,retryCount: Int) async throws -> T {
+    private func performRequest<T: Decodable & Sendable>(_ request: URLRequest, retryCount: Int) async throws -> T {
         do {
             let (data, response) = try await session.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse else {
